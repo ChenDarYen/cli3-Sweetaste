@@ -1,0 +1,20 @@
+@mixin bg-cover {
+  background-size: cover;
+  background-position: center center;
+}
+@mixin flex-wrap($j-c: space-between, $a-i: stretch, $f-d: row) {
+  display: inline-flex;
+  flex-wrap: wrap;
+  flex-direction: $f-d;
+  justify-content: $j-c;
+  align-items: $a-i;
+}
+@mixin standard-btn {
+  color: $primary;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 4rem;
+}
+@mixin admin-btn {
+  line-height: calc( 100% + .75rem);
+}
