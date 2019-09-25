@@ -6,26 +6,18 @@
 </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  data () {
-    return {
-      cartLen: 0
-    }
+  computed: {
+    ...mapGetters('cart', ['cartLen'])
   },
   methods: {
-    getCart () {
-      const vm = this
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`
-      this.$http.get(api).then((response) => {
-        vm.cart = response.data.data
-        vm.cartLen = response.data.data.carts.length
-      })
-    }
+    ...mapActions('cart', ['getCart'])
   },
   created () {
     const vm = this
     vm.getCart()
-    vm.$bus.$on('cart:update', vm.getCart)
   }
 }
 </script>

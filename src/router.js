@@ -17,6 +17,7 @@ import Login from '@/views/login.vue'
 Vue.use(Router, Axios, VueAxios)
 
 export default new Router({
+  mode: 'hash',
   routes: [
     {
       path: '*',

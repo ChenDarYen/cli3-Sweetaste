@@ -30,16 +30,11 @@ export default {
   },
   methods: {
     addToCart (item) {
-      const vm = this
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`
-      this.$http.post(api, { data: {
-        product_id: item.id,
-        qty: 1
-      } }).then(response => {
-        if (response.data.success) {
-          vm.$bus.$emit('message:push', `成功將 ${item.title}*1 加入購物車`, 'secondary')
-          vm.$bus.$emit('cart:update')
-        }
+      const message = `成功將 ${item.title}*1 加入購物車`
+      this.$store.dispatch('cart/addToCart', {
+        id: item.id,
+        qty: 1,
+        message
       })
     },
     directToDessert (id) {

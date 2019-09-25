@@ -1,9 +1,9 @@
 <template>
   <div>
     <Cart v-if="situation === 'cart'"
-    :cart="cart" @getCart="getCart" @changeSituation="changeSituation"/>
+    @changeSituation="changeSituation"/>
     <Delivery v-if="situation === 'delivery'"
-    :cart="cart" @changeSituation="changeSituation"/>
+    @changeSituation="changeSituation"/>
   </div>
 </template>
 <script>
@@ -13,29 +13,13 @@ import Delivery from '@/components/main-cart-delivery'
 export default {
   data () {
     return {
-      situation: 'cart',
-      cart: {
-        delivery: 100,
-        total: 0,
-        cart: []
-      }
+      situation: 'cart'
     }
   },
   methods: {
-    getCart () {
-      const vm = this
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`
-      this.$http.get(api).then(response => {
-        vm.cart.cart = response.data.data.carts
-        vm.cart.total = response.data.data.total
-      })
-    },
     changeSituation (situation) {
       this.situation = situation
     }
-  },
-  created () {
-    this.getCart()
   },
   components: {
     Cart,

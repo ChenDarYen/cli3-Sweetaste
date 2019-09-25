@@ -142,7 +142,10 @@ export default {
           vm.orders = response.data.orders
           vm.pagination = response.data.pagination
         } else {
-          this.$bus.$emit('message:push', '獲取訂單失敗', 'danger')
+          vm.$store.dispatch('alert/updateMessage', {
+            message: '獲取訂單失敗',
+            status: 'danger'
+          })
         }
       })
     },

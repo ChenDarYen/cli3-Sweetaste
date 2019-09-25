@@ -195,12 +195,18 @@ export default {
           if (response.data.success) {
             $('#productModal').modal('hide')
             $('#delProductModal').modal('hide')
-            this.$bus.$emit('message:push', `${method}成功`, 'success')
+            vm.$store.dispatch('alert/updateMessage', {
+              message: `${method}成功`,
+              status: 'success'
+            })
             vm.getProducts()
           } else {
             $('#productModal').modal('hide')
             $('#delProductModal').modal('hide')
-            this.$bus.$emit('message:push', response.data.message, 'danger')
+            vm.$store.dispatch('alert/updateMessage', {
+              message: response.data.message,
+              status: 'danger'
+            })
           }
         })
       }
@@ -238,7 +244,10 @@ export default {
         if (response.data.success) {
           vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl)
         } else {
-          this.$bus.$emit('message:push', response.data.message.code, 'danger')
+          vm.$store.dispatch('alert/updateMessage', {
+            message: response.data.message.code,
+            status: 'danger'
+          })
         }
         vm.status.fileUpLoading = false
       })

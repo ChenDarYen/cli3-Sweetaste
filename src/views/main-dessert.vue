@@ -39,16 +39,11 @@ export default {
       })
     },
     addToCart (qty) {
-      const vm = this
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart`
-      this.$http.post(api, { data: {
-        product_id: this.dessert.id,
-        qty: qty
-      } }).then(response => {
-        if (response.data.success) {
-          vm.$bus.$emit('message:push', `成功將 ${vm.dessert.title}*${vm.qty} 加入購物車`, 'secondary')
-          vm.$bus.$emit('cart:update')
-        }
+      const message = `成功將 ${this.dessert.title}*${this.qty} 加入購物車`
+      this.$store.dispatch('cart/addToCart', {
+        id: this.dessert.id,
+        qty,
+        message
       })
     }
   },

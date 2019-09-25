@@ -3,7 +3,7 @@
     <div class="cart-content">
       <h2>您的購物車</h2>
       <ul class="cart list-group">
-        <li class="cart-item list-group-item" v-for="(item, index) in cart.cart" :key="index">
+        <li class="cart-item list-group-item" v-for="(item, index) in cart.carts" :key="index">
           <div class="img-container">
             <div class="img" :style="{'background-image': 'url(' + item.product.imageUrl + ')'}"></div>
           </div>
@@ -36,44 +36,25 @@
       <div class="order">
         <h2>訂單摘要</h2>
         <div class="subtitle">小記</div>
-        <div class="amount">{{ cart.total | currencyFilter }}</div>
+        <div class="amount">{{ cartTotal | currencyFilter }}</div>
         <div class="subtitle">運費</div>
-        <div class="amount">{{ cart.delivery | currencyFilter }}</div>
+        <div class="amount">{{ delivery | currencyFilter }}</div>
         <div class="order-total subtitle">總計</div>
-        <div class="order-total amount">{{ cart.total + cart.delivery | currencyFilter }}</div>
+        <div class="order-total amount">{{ cartTotal + delivery | currencyFilter }}</div>
       </div>
       <button class="btn btn-secondary" @click="changeSituation('delivery')">結帳</button>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  props: {
-    cart: {
-      type: Object,
-      default: () => {
-        return {
-          delivery: 0,
-          total: 0,
-          cart: []
-        }
-      }
-    }
+  computed: {
+    ...mapGetters('cart', ['cart', 'cartTotal', 'delivery'])
   },
   methods: {
-    getCart () {
-      this.$emit('getCart')
-    },
-    removeFromCart (id) {
-      const vm = this
-      const api = `${process.env.VUE_APP_APIPATH}/api/${process.env.VUE_APP_CUSTOMPATH}/cart/${id}`
-      this.$http.delete(api).then(response => {
-        if (response.data.success) {
-          this.$emit('getCart')
-          vm.$bus.$emit('cart:update')
-        }
-      })
-    },
+    ...mapActions('cart', ['getCart', 'removeFromCart']),
     changeSituation (situation) {
       this.$emit('changeSituation', situation)
     }

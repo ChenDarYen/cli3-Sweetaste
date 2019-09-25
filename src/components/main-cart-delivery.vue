@@ -70,18 +70,18 @@
         <h2>訂單摘要</h2>
         <div class="content">
           <div class="subtitle">小記</div>
-          <div class="amount">{{ cart.total | currencyFilter }}</div>
+          <div class="amount">{{ cartTotal | currencyFilter }}</div>
           <div class="subtitle">運費</div>
-          <div class="amount">{{ cart.delivery | currencyFilter }}</div>
+          <div class="amount">{{ delivery | currencyFilter }}</div>
           <div class="order-total subtitle">總計</div>
-          <div class="order-total amount">{{ cart.total + cart.delivery | currencyFilter }}</div>
+          <div class="order-total amount">{{ cartTotal + delivery | currencyFilter }}</div>
         </div>
       </div>
       <div class="info-item">
         <h2>購物清單</h2>
         <div class="content">
           <ul class="cart list-group">
-            <li class="cart-item list-group-item" v-for="(item, index) in cart.cart" :key="index">
+            <li class="cart-item list-group-item" v-for="(item, index) in cart.carts" :key="index">
               <div class="img" :style="{'background-image': 'url(' + item.product.imageUrl + ')'}"></div>
               <div class="dessert-info">
                 <div>
@@ -101,19 +101,9 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  props: {
-    cart: {
-      type: Object,
-      default: () => {
-        return {
-          delivery: 0,
-          total: 0,
-          cart: []
-        }
-      }
-    }
-  },
   data () {
     return {
       ajaxOpen: true,
@@ -131,6 +121,9 @@ export default {
       orderId: ''
     }
   },
+  computed: {
+    ...mapGetters('cart', ['cart', 'cartTotal', 'delivery'])
+  },
   methods: {
     changeSituation (situation) {
       this.$emit('changeSituation', situation)
@@ -147,7 +140,7 @@ export default {
                 vm.orderId = response.data.orderId
                 vm.confirm = true
                 vm.ajaxOpen = true
-                vm.$bus.$emit('cart:update')
+                vm.$store.dispatch('cart/getCart')
               }
             })
           }
